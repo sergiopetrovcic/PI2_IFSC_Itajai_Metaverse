@@ -12,9 +12,6 @@ public class CharacterSelection : MonoBehaviour
 
     private GameObject[] characterList;
 
-    private string selectedGender; 
-
-    
     private void Start()
     {
         characterList = new GameObject[2];
@@ -30,32 +27,28 @@ public class CharacterSelection : MonoBehaviour
             characterList[0].SetActive(true);
 
         CharacterList.Instance.SelectedCharIndex = 0;
-
-        selectedGender = PlayerPrefs.GetString("SelectedGender", "Masculino");
     }
 
     public void SelecionarButton()
     {
-        
-        if (selectedGender == "Masculino")
+        bool isLeftPanelVisible = characterPanelLeft.gameObject.activeSelf;
+
+        if (isLeftPanelVisible)
         {
-            PlayerPrefs.SetInt("SelectedGender", 0); 
+            Instantiate(femininoCharacterPrefab, spawnPoint.position, Quaternion.identity);
         }
-        else if (selectedGender == "Feminino")
+        else
         {
-            PlayerPrefs.SetInt("SelectedGender", 1); 
+            Instantiate(masculinoCharacterPrefab, spawnPoint.position, Quaternion.identity);
         }
-        PlayerPrefs.Save(); 
 
         PlayerPrefs.SetInt("CharacterSelected", CharacterList.Instance.SelectedCharIndex);
         SceneManager.LoadScene("Jogo");
     }
 
     [SerializeField] CharacterPanel characterPanelLeft;
-
     [SerializeField] CharacterPanel characterPanelRight;
 
-    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -77,16 +70,5 @@ public class CharacterSelection : MonoBehaviour
     {
         characterPanelLeft.UpdateCharacterPanel(CharacterList.Instance.GetPrevious());
         characterPanelRight.UpdateCharacterPanel(CharacterList.Instance.GetNext());
-
-        if (selectedGender == "1")
-        {
-            characterPanelRight.gameObject.SetActive(true);
-            characterPanelLeft.gameObject.SetActive(false);
-        }
-        else if (selectedGender == "0")
-        {
-            characterPanelLeft.gameObject.SetActive(true);
-            characterPanelRight.gameObject.SetActive(false);
-        }
     }
 }
