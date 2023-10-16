@@ -42,7 +42,24 @@ public class CharacterSelection : MonoBehaviour
             Instantiate(masculinoCharacterPrefab, spawnPoint.position, Quaternion.identity);
         }
 
-        PlayerPrefs.SetInt("CharacterSelected", CharacterList.Instance.SelectedCharIndex);
+        int selectedGender = CharacterList.Instance.SelectedCharIndex;
+        Debug.Log("SelectedGender: " + selectedGender);
+
+        GameObject[] personagens = new GameObject[2];
+        personagens[0] = femininoCharacterPrefab;
+        personagens[1] = masculinoCharacterPrefab;
+
+        if (selectedGender >= 0 && selectedGender < personagens.Length)
+        {
+            GameObject character = Instantiate(personagens[selectedGender], transform.position, Quaternion.identity);
+
+            DontDestroyOnLoad(character);
+        }
+        else
+        {
+            Debug.LogError("Índice de gênero selecionado fora dos limites.");
+        }
+
         SceneManager.LoadScene("Jogo");
     }
 
