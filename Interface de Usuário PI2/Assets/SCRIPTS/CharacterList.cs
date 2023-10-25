@@ -40,14 +40,4 @@ public class CharacterList : MonoBehaviour
         return characters[SelectedCharIndex + 1];
 
     }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
