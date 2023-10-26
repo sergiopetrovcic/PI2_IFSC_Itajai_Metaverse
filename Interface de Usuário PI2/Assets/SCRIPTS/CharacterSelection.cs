@@ -11,7 +11,6 @@ public class CharacterSelection : MonoBehaviour
     public Transform spawnPoint;
 
     private GameObject[] characterList;
-   
 
     private void Start()
     {
@@ -29,38 +28,24 @@ public class CharacterSelection : MonoBehaviour
 
         CharacterList.Instance.SelectedCharIndex = 0;
     }
+
     public void SelecionarButton()
     {
-        // Salva a escolha do gênero nas PlayerPrefs
         int selectedGender = CharacterList.Instance.SelectedCharIndex;
+
+        // Configurar as PlayerPrefs com base na escolha do jogador
         PlayerPrefs.SetInt("SelectedGender", selectedGender);
         PlayerPrefs.Save();
 
-        // Desativa os personagens na cena de seleção
-        for (int i = 0; i < characterList.Length; i++)
-        {
-            characterList[i].SetActive(false);
-        }
 
-        // Carrega a próxima cena
         SceneManager.LoadScene("Jogo");
     }
-
-
 
     [SerializeField] CharacterPanel characterPanelLeft;
     [SerializeField] CharacterPanel characterPanelRight;
 
     void Update()
     {
-
-        // Obtém o valor de selectedGender das PlayerPrefs
-        int selectedGender = PlayerPrefs.GetInt("SelectedGender", 0);
-
-        // Exibe o valor de selectedGender no console
-        Debug.Log("Selected Gender: " + (selectedGender == 0 ? "Feminino" : "Masculino"));
-
-
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             CharacterList.Instance.SelectedCharIndex++;
@@ -79,5 +64,4 @@ public class CharacterSelection : MonoBehaviour
         characterPanelLeft.UpdateCharacterPanel(CharacterList.Instance.GetPrevious());
         characterPanelRight.UpdateCharacterPanel(CharacterList.Instance.GetNext());
     }
-
 }

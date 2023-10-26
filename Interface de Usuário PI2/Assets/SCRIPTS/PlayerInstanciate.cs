@@ -15,12 +15,12 @@ public class PlayerInstanciate : MonoBehaviour
         }
 
         int selectedGender = PlayerPrefs.GetInt("SelectedGender", 0);
-        Debug.Log("SelectedGender: " + selectedGender); 
+        Debug.Log("SelectedGender: " + selectedGender);
 
         if (selectedGender >= 0 && selectedGender < personagens.Length)
         {
             GameObject character = Instantiate(personagens[selectedGender], transform.position, Quaternion.identity);
-
+            DontDestroyOnLoad(character);
         }
         else
         {

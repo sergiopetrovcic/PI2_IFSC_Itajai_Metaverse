@@ -19,7 +19,7 @@ public class CameraFollowPlayer : MonoBehaviour
         mainCamera.orthographicSize = initialZoom;
 
         // Determine qual personagem seguir com base na escolha do jogador
-     
+
         int selectedGender = PlayerPrefs.GetInt("SelectedGender", 0);
 
         if (selectedGender == 0)
