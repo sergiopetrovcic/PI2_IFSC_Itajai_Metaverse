@@ -4,26 +4,23 @@ using UnityEngine;
 
 public class PlayerInstanciate : MonoBehaviour
 {
-    public GameObject[] personagens; // Certifique-se de configurar os prefabs corretamente no Inspetor.
+    public GameObject[] personagens;
 
     private void Awake()
     {
         if (!PlayerPrefs.HasKey("SelectedGender"))
         {
             Debug.LogError("A chave 'SelectedGender' não está definida em PlayerPrefs.");
-            //return;
+            return;
         }
 
-        //int selectedGender = PlayerPrefs.GetInt("SelectedGender", 0);
-        PlayerPrefs.SetInt("SelectedGender", 0);
-        int selectedGender = 0;
-        Debug.Log("SelectedGender: " + selectedGender);
+        int selectedGender = PlayerPrefs.GetInt("SelectedGender", 0);
+        Debug.Log("SelectedGender: " + selectedGender); 
 
         if (selectedGender >= 0 && selectedGender < personagens.Length)
         {
             GameObject character = Instantiate(personagens[selectedGender], transform.position, Quaternion.identity);
-           
-            DontDestroyOnLoad(character);
+
         }
         else
         {

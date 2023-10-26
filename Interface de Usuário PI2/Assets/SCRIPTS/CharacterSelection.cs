@@ -11,6 +11,7 @@ public class CharacterSelection : MonoBehaviour
     public Transform spawnPoint;
 
     private GameObject[] characterList;
+   
 
     private void Start()
     {
@@ -28,57 +29,47 @@ public class CharacterSelection : MonoBehaviour
 
         CharacterList.Instance.SelectedCharIndex = 0;
     }
-
     public void SelecionarButton()
     {
-        bool isLeftPanelVisible = characterPanelLeft.gameObject.activeSelf;
-
-        if (isLeftPanelVisible)
-        {
-            Instantiate(femininoCharacterPrefab, spawnPoint.position, Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(masculinoCharacterPrefab, spawnPoint.position, Quaternion.identity);
-        }
-
+        // Salva a escolha do gênero nas PlayerPrefs
         int selectedGender = CharacterList.Instance.SelectedCharIndex;
-        Debug.Log("SelectedGender: " + selectedGender);
+        PlayerPrefs.SetInt("SelectedGender", selectedGender);
+        PlayerPrefs.Save();
 
-        GameObject[] personagens = new GameObject[2];
-        personagens[0] = femininoCharacterPrefab;
-        personagens[1] = masculinoCharacterPrefab;
-
-        if (selectedGender >= 0 && selectedGender < personagens.Length)
+        // Desativa os personagens na cena de seleção
+        for (int i = 0; i < characterList.Length; i++)
         {
-            GameObject character = Instantiate(personagens[selectedGender], transform.position, Quaternion.identity);
-
-            DontDestroyOnLoad(character);
-        }
-        else
-        {
-            Debug.LogError("Índice de gênero selecionado fora dos limites.");
+            characterList[i].SetActive(false);
         }
 
+        // Carrega a próxima cena
         SceneManager.LoadScene("Jogo");
     }
+
+
 
     [SerializeField] CharacterPanel characterPanelLeft;
     [SerializeField] CharacterPanel characterPanelRight;
 
     void Update()
     {
+
+        // Obtém o valor de selectedGender das PlayerPrefs
+        int selectedGender = PlayerPrefs.GetInt("SelectedGender", 0);
+
+        // Exibe o valor de selectedGender no console
+        Debug.Log("Selected Gender: " + (selectedGender == 0 ? "Feminino" : "Masculino"));
+
+
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             CharacterList.Instance.SelectedCharIndex++;
-            Debug.Log("left");
             UpdateCharacterPanels();
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             CharacterList.Instance.SelectedCharIndex--;
-            Debug.Log("right");
             UpdateCharacterPanels();
         }
     }
@@ -88,4 +79,5 @@ public class CharacterSelection : MonoBehaviour
         characterPanelLeft.UpdateCharacterPanel(CharacterList.Instance.GetPrevious());
         characterPanelRight.UpdateCharacterPanel(CharacterList.Instance.GetNext());
     }
+
 }
