@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ZoomController : MonoBehaviour
 {
-    public float zoomSpeed = 2.0f; // Velocidade de zoom
-    public float targetZoom = 2.0f; // Zoom alvo
-    public float minZoom = 1.0f; // Zoom mínimo
+    public float zoomSpeed = 0.5f; // Velocidade de zoom
+    public float targetZoom = 0.5f; // Zoom alvo
+    public float minZoom = 0f; // Zoom mínimo
 
     private Camera mainCamera;
     private Transform characterTransform;

@@ -11,34 +11,21 @@ public class Porta : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.O) &&_colidindo)
+        if (Input.GetKey(KeyCode.O))
         {
-            _PortaAberta=true;
+            _PortaAberta = true;
             _animator.SetTrigger("Abrir");
         }
-    }
-    private void OnTriggerEnter(Collider _col)
-    {
-        if (_col.gameObject.CompareTag("Player"))
+        if (Input.GetKey(KeyCode.C))
         {
-            _colidindo=true;
-        }
-    }
-    private void OnTriggerExit(Collider _col)
-    {
-        if(_col.gameObject.CompareTag("Player"))
-        {
-            if(_PortaAberta)
-            {
-                _animator.SetTrigger("Fechar");
-            }
-            _colidindo = false;
+            _PortaAberta = true;
+            _animator.SetTrigger("Fechar");
         }
     }
 }
