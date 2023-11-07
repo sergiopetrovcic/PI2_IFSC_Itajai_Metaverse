@@ -20,12 +20,7 @@ public class Porta : MonoBehaviour
         if (Input.GetKey(KeyCode.O))
         {
             _PortaAberta = true;
-            _animator.SetTrigger("Abrir");
-        }
-        if (Input.GetKey(KeyCode.C))
-        {
-            _PortaAberta = true;
-            _animator.SetTrigger("Fechar");
+            _animator.SetTrigger("Abrir28");
         }
     }
 }
