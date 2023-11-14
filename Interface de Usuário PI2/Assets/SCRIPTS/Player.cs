@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
                 anim.SetInteger("transition", 1);
             }
 
-            if(Input.GetKeyUp(KeyCode.W) )
+            if (Input.GetKeyUp(KeyCode.W) )
             {
                 moveDirection = Vector3.zero;
                 anim.SetInteger("transition", 0);

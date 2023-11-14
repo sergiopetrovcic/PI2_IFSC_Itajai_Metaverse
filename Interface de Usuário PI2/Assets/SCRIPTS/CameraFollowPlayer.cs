@@ -1,25 +1,29 @@
 using UnityEngine;
+using Cinemachine;
 
-public class CameraFollowPlayer : MonoBehaviour
+public class CinemachineCharacterFollow : MonoBehaviour
 {
-    public GameObject femininoCharacterPrefab;
-    public GameObject masculinoCharacterPrefab;
-
-    private GameObject target;
+    public CinemachineFreeLook maleCharacterCamera;
+    public CinemachineFreeLook femaleCharacterCamera;
 
     private void Start()
     {
-        // Determine qual personagem seguir com base na escolha do jogador
-     
+
+        
+        maleCharacterCamera.gameObject.SetActive(false);
+        femaleCharacterCamera.gameObject.SetActive(false);
+
+        // Verifique a escolha do jogador nas PlayerPrefs
         int selectedGender = PlayerPrefs.GetInt("SelectedGender", 0);
 
+        
         if (selectedGender == 0)
         {
-            target = femininoCharacterPrefab;
+            maleCharacterCamera.gameObject.SetActive(true);
         }
         else
         {
-            target = masculinoCharacterPrefab;
+            femaleCharacterCamera.gameObject.SetActive(true);
         }
     }
 }

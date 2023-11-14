@@ -13,13 +13,13 @@ public class AtivarPersonagem : MonoBehaviour
         // Ative o personagem correspondente com base no valor de SelectedGender
         if (selectedGender == 0)
         {
-            femininoCharacterPrefab.SetActive(true);
-            masculinoCharacterPrefab.SetActive(false);
+            femininoCharacterPrefab.SetActive(false);
+            masculinoCharacterPrefab.SetActive(true);
         }
         else
         {
-            femininoCharacterPrefab.SetActive(false);
-            masculinoCharacterPrefab.SetActive(true);
+            femininoCharacterPrefab.SetActive(true);
+            masculinoCharacterPrefab.SetActive(false);
         }
     }
 }
