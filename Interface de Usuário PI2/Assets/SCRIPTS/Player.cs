@@ -31,17 +31,16 @@ public class Player : MonoBehaviour
     {
         if(controller.isGrounded)
         {
-            if(Input.GetKey(KeyCode.W))
-            {
-                moveDirection = Vector3.forward * speed;
-                anim.SetInteger("transition", 1);
-            }
+            float speedTemp = speed;
+            if (Input.GetKey(KeyCode.LeftShift))
+                speedTemp *= 2;
 
-            if (Input.GetKeyUp(KeyCode.W) )
-            {
-                moveDirection = Vector3.zero;
+            moveDirection = Input.GetAxis("Vertical") * Vector3.forward * speedTemp;
+
+            if (Input.GetAxis("Vertical") != 0)
+                anim.SetInteger("transition", 1);
+            else
                 anim.SetInteger("transition", 0);
-            }
         }
 
         rot += Input.GetAxis("Horizontal") * rotSpeed * Time.deltaTime;
