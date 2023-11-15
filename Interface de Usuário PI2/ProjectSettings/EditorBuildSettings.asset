@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Jogo.unity
     guid: 69b0f3d99b25df14a93297ae3150bd41
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Cadastro.unity
     guid: 2eb9c4c71643e674d9976002d4663fdf
   m_configObjects: {}

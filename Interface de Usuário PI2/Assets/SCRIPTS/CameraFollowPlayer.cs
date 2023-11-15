@@ -1,10 +1,10 @@
 using UnityEngine;
 using Cinemachine;
 
-public class CinemachineCharacterFollow : MonoBehaviour
+public class CharacterFollow : MonoBehaviour
 {
-    public CinemachineFreeLook maleCharacterCamera;
-    public CinemachineFreeLook femaleCharacterCamera;
+    public Camera maleCharacterCamera;
+    public Camera femaleCharacterCamera;
 
     private void Start()
     {

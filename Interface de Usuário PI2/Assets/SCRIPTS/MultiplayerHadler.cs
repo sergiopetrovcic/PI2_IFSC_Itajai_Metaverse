@@ -19,13 +19,11 @@ public class InteractiveObject : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (stream.IsWriting)
         {
-            // Envie dados para outros jogadores
-            // Exemplo: stream.SendNext(transform.position);
+            stream.SendNext(transform.position);
         }
         else
         {
-            // Receba dados de outros jogadores
-            // Exemplo: transform.position = (Vector3)stream.ReceiveNext();
+            transform.position = (Vector3)stream.ReceiveNext();
         }
     }
 }
