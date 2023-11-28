@@ -6,6 +6,13 @@ using UnityEngine.UI;
 
 public class DialogueControl : MonoBehaviour
 {
+    private Dialogue di;
+
+    private void Start()
+    {
+        di = FindObjectOfType<Dialogue>();
+    }
+
     [Header("Components")]
     public GameObject Estágio;
     public GameObject AEstudantil;
@@ -59,6 +66,7 @@ public class DialogueControl : MonoBehaviour
                 speechText.text = "";
                 index = 0;
                 dialogueObj.SetActive(false);
+                di._colidindo = true;
             }
         }
         return;
@@ -98,8 +106,20 @@ public class DialogueControl : MonoBehaviour
         dialogueObj.SetActive(true);
     }
 
+    public void AbrirChatBot()
+    {
+        Speech(di.profile, di.speechTxt, di.actorName); ;
+        SecVirtual.SetActive(false);
+        dialogueObj.SetActive(true);
+        di._colidindo = false;
+    }
+
     public void FecharChatBot()
     {
         dialogueObj.SetActive(false);
+        di._colidindo = true;
+        speechText.text = "";
+
+
     }
 }

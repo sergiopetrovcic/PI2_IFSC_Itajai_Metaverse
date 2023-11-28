@@ -22,16 +22,17 @@ public class Dialogue : MonoBehaviour
         dc = FindObjectOfType<DialogueControl>();
     }
 
-private void Update()
+public void Update()
     {
-       if (_colidindo && Input.GetKeyDown(KeyCode.Space))
-            {
-                dc.Speech(profile, speechTxt, actorName);
-            }
-            else
-            {
-                return;
-            }
+        if (_colidindo)
+        {
+            dc.SecVirtual.SetActive(true);
+        }
+        else
+        {
+            dc.SecVirtual.SetActive(false);
+        }
+        return;
     }
 
     void OnTriggerEnter(Collider _col)
