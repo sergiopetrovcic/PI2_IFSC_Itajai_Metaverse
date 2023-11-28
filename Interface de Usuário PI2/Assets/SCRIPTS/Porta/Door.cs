@@ -7,7 +7,6 @@ public class Door : MonoBehaviour
     public string _playerTag = "Player";
 
     public Animator _anima;
-    private bool _estado = false;
     private bool _colidindo = false;
    
     void Update()
