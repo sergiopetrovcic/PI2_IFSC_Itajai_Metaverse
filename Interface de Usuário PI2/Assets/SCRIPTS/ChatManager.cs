@@ -2,52 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using Photon.Pun;
 
 public class ChatManager : MonoBehaviour, IPunObservable
 {
-    public Player plMove;
     public PhotonView photonView;
     public GameObject BubbleSpeechObject;
-    public Text UpdateText;
+    public TextMeshProUGUI UpdateText;
 
     public InputField ChatInputField;
     private bool DisableSend;
-
-    private void Awake()
-    {
-        ChatInputField = GameObject.Find("ChatInputField").GetComponent<InputField>();
-
-        if (ChatInputField == null)
-        {
-            Debug.LogError("ChatInputField not found or does not have InputField component.");
-        }
-    }
 
     private void Update()
     {
         if (photonView.IsMine)
         {
-            // Verifica se o ChatInputField não é nulo e está focado
             if (ChatInputField != null && ChatInputField.isFocused)
             {
-                // Verifica se a tecla Enter foi pressionada
+                // Debug: Verifica se o ChatInputField está focado
+                Debug.Log("ChatInputField is focused.");
+
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    // Verifica se o texto não está vazio
+                    // Debug: Verifica se a tecla Enter foi pressionada
+                    Debug.Log("Enter key is pressed.");
+
                     if (!string.IsNullOrEmpty(ChatInputField.text))
                     {
-                        // Chama a RPC para enviar a mensagem
+                        // Debug: Verifica se o texto não está vazio
+                        Debug.Log("Sending message: " + ChatInputField.text);
+
                         photonView.RPC("SendMessage", RpcTarget.AllBuffered, ChatInputField.text);
                         BubbleSpeechObject.SetActive(true);
+                        BubbleSpeechObject.transform.position = GetSpeechPosition();
 
-                        // Limpa o texto do ChatInputField
                         ChatInputField.text = "";
                         DisableSend = true;
                     }
                 }
             }
         }
+    }
+
+    private Vector3 GetSpeechPosition()
+    {
+        return transform.position + Vector3.up * 2.0f;
     }
 
     [PunRPC]
@@ -69,7 +69,8 @@ public class ChatManager : MonoBehaviour, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(BubbleSpeechObject.active);
-        }else if (stream.IsReading)
+        }
+        else if (stream.IsReading)
         {
             BubbleSpeechObject.SetActive((bool)stream.ReceiveNext());
         }
