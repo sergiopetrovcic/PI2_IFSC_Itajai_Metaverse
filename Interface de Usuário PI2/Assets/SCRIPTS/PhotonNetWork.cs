@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class PhotonNetWork : MonoBehaviourPunCallbacks
 {
@@ -12,32 +13,61 @@ public class PhotonNetWork : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    public override void OnConnectedToMaster()
+    public void SearchRoom()
     {
-        Debug.Log("Conectado ao Master Server");
-        PhotonNetwork.JoinLobby();
+        Debug.Log("Searching for a random room...");
+        PhotonNetwork.JoinRandomRoom();
     }
 
-    public override void OnJoinedLobby()
+    public override void OnConnectedToMaster()
     {
-        Debug.Log("Entrou no Lobby");
+        Debug.Log("Connected to Master Server");
+        CreateRoom();
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log("Join Random Failed. Creating a new room. Reason: " + message);
+        CreateRoom();
+    }
+
+    private void CreateRoom()
+    {
+        Debug.Log("Creating or joining a room...");
         PhotonNetwork.JoinOrCreateRoom("Campus 3D interativo", new RoomOptions { MaxPlayers = 20 }, TypedLobby.Default);
-        PhotonNetwork.JoinRandomRoom();
     }
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("Entrou na Sala");
-        // Restante do seu código...
+        Debug.Log("Joined Room: " + PhotonNetwork.CurrentRoom.Name);
 
         PhotonNetwork.Instantiate("masculinoCharacterPrefab 2", new Vector2(Random.Range(-5f, 7f), transform.position.y), Quaternion.identity);
         PhotonNetwork.Instantiate("femininoCharacterPrefab 2", new Vector2(Random.Range(-5f, 7f), transform.position.y), Quaternion.identity);
     }
 
-    public override void OnJoinRandomFailed(short returnCode, string message)
+    
+    private void OnEnable()
     {
-        Debug.Log("Join Random Failed. Creating a new room.");
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 4 });
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        
+        PhotonNetwork.IsMessageQueueRunning = true;
+    }
+
+    void ChangeScene()
+    {
+        
+        PhotonNetwork.IsMessageQueueRunning = false;
+
+
     }
 
 }
