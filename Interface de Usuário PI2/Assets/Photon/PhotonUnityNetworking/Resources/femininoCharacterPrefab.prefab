@@ -1286,7 +1286,7 @@ MonoBehaviour:
   - {fileID: 4411572059749283445}
   - {fileID: 3433154187702075400}
   - {fileID: 4691604950661284618}
-  sceneViewId: 1
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &7929645137493530337
@@ -1398,7 +1398,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2154480248be39c48b54597f89beee04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plMove: {fileID: 0}
-  photonView: {fileID: 1821891311973108049}
-  BubbleSpeechObject: {fileID: 0}
-  UpdateText: {fileID: 0}
+  chatBubblePrefab: {fileID: 0}
+  chatBubbleSpawnPoint: {fileID: 0}
+  chatBubbleDuration: 4

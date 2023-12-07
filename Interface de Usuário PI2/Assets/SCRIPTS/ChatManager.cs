@@ -1,78 +1,71 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 
-public class ChatManager : MonoBehaviour, IPunObservable
+public class ChatManager : MonoBehaviourPun
 {
-    public PhotonView photonView;
-    public GameObject BubbleSpeechObject;
-    public TextMeshProUGUI UpdateText;
+    public GameObject chatBubblePrefab;
+    public Transform chatBubbleSpawnPoint;
+    private TMP_InputField inputField;
+    public float chatBubbleDuration = 4f;
 
-    public InputField ChatInputField;
-    private bool DisableSend;
-
-    private void Update()
+    private void Start()
     {
-        if (photonView.IsMine)
+        inputField = GetComponentInChildren<TMP_InputField>();
+
+        if (!PhotonNetwork.IsConnected)
         {
-            if (ChatInputField != null && ChatInputField.isFocused)
-            {
-                // Debug: Verifica se o ChatInputField está focado
-                Debug.Log("ChatInputField is focused.");
+            PhotonNetwork.ConnectUsingSettings();
+        }
 
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    // Debug: Verifica se a tecla Enter foi pressionada
-                    Debug.Log("Enter key is pressed.");
-
-                    if (!string.IsNullOrEmpty(ChatInputField.text))
-                    {
-                        // Debug: Verifica se o texto não está vazio
-                        Debug.Log("Sending message: " + ChatInputField.text);
-
-                        photonView.RPC("SendMessage", RpcTarget.AllBuffered, ChatInputField.text);
-                        BubbleSpeechObject.SetActive(true);
-                        BubbleSpeechObject.transform.position = GetSpeechPosition();
-
-                        ChatInputField.text = "";
-                        DisableSend = true;
-                    }
-                }
-            }
+        if (inputField != null)
+        {
+            inputField.onEndEdit.AddListener(OnEndEdit);
+        }
+        else
+        {
+            Debug.LogError("TMP_InputField não encontrado no objeto ou em seus filhos: " + gameObject.name);
         }
     }
 
-    private Vector3 GetSpeechPosition()
+    private void OnEndEdit(string text)
     {
-        return transform.position + Vector3.up * 2.0f;
+        if (PhotonNetwork.InRoom)
+        {
+            // Se estiver em uma sala, você pode chamar o RPC.
+            photonView.RPC("InstantiateChatBubble", RpcTarget.All, text);
+        }
+        else
+        {
+            // Lidar com a lógica quando não estiver em uma sala.
+            Debug.LogWarning("Você não está em uma sala para enviar RPC.");
+            // Adicione qualquer outra lógica necessária aqui.
+        }
+
+        // Remova a chamada do RPC aqui para evitar chamadas duplicadas
+        // ...
+
+        // Limpe o campo de entrada após o envio da mensagem
+        inputField.text = "";
     }
 
     [PunRPC]
-    private void SendMessage(string message)
+    private void InstantiateChatBubble(string text)
     {
-        UpdateText.text = message;
-        StartCoroutine("Remove");
-    }
+        GameObject chatBubble = PhotonNetwork.Instantiate(chatBubblePrefab.name, chatBubbleSpawnPoint.position, Quaternion.identity);
 
-    IEnumerator Remove()
-    {
-        yield return new WaitForSeconds(4f);
-        BubbleSpeechObject.SetActive(false);
-        DisableSend = false;
-    }
+        TextMeshProUGUI textMeshPro = chatBubble.GetComponent<TextMeshProUGUI>();
+        if (textMeshPro != null)
+        {
+            textMeshPro.text = text;
+        }
+        else
+        {
+            Debug.LogError("TextMeshProUGUI not found on chatBubble or its children.");
+        }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(BubbleSpeechObject.active);
-        }
-        else if (stream.IsReading)
-        {
-            BubbleSpeechObject.SetActive((bool)stream.ReceiveNext());
-        }
+        Destroy(chatBubble, chatBubbleDuration);
     }
 }
